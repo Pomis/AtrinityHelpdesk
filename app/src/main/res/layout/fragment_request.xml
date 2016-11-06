@@ -32,10 +32,12 @@
     <EditText
         android:id="@+id/et_request_solution"
         android:minLines="5"
+        android:hint="Решение"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/tv_event_first"
         android:background="@drawable/background_timed_event"
         android:layout_width="match_parent"
         android:paddingTop="20dp"
@@ -43,6 +45,7 @@
         android:text="Время подачи заявки"
         android:layout_height="wrap_content" />
     <TextView
+        android:id="@+id/tv_event_second"
         android:background="@drawable/background_timed_event"
         android:layout_width="match_parent"
         android:paddingTop="20dp"
@@ -51,6 +54,7 @@
         android:text="Планируемое время завершения"
         android:layout_height="wrap_content" />
     <TextView
+        android:id="@+id/tv_event_third"
         android:background="@drawable/background_timed_event"
         android:layout_width="match_parent"
         android:paddingLeft="60dp"

@@ -89,7 +89,8 @@ public class RequestListFragment extends Fragment {
     @OnItemClick(R.id.lv_requests)
     void openRequest(int position) {
         Intent intent = new Intent(getContext(), RequestActivity.class)
-                .putExtra("id", ((RequestModel)requestList.get(position)).RequestID);
+                .putExtra("id", ((RequestModel)requestList.get(position)).RequestID)
+                .putExtra("status", ((RequestModel)requestList.get(position)).StatusDisplayName);
         startActivity(intent);
 
     }
