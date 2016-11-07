@@ -17,7 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RequestActivity"></activity>
+        <activity
+            android:name=".activities.RequestActivity"
+            android:parentActivityName=".activities.RequestListActivity">
+
+        </activity>
     </application>
 
 </manifest>

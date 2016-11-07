@@ -3,12 +3,14 @@ package pomis.app.atrinityhelpdesk.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +27,6 @@ import pomis.app.atrinityhelpdesk.networking.OnResponseCodeReceived;
  */
 public class RequestFragment extends Fragment {
 
-    @BindView(R.id.tv_request_status)
-    TextView tvStatus;
 
     @BindView(R.id.tv_request_fio)
     TextView tvFIO;
@@ -46,6 +46,8 @@ public class RequestFragment extends Fragment {
     @BindView(R.id.tv_event_third)
     TextView tvEventThird;
 
+    AlertDialog dialog;
+
     public RequestFragment() {
         // Required empty public constructor
     }
@@ -57,6 +59,8 @@ public class RequestFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, v);
+        showIndicator();
+        loadData();
         return v;
     }
 
@@ -64,7 +68,14 @@ public class RequestFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+
+    }
+
+    private void showIndicator() {
+        dialog = new AlertDialog.Builder(getContext())
+                .setMessage("Загрузка...")
+                .setCancelable(false)
+                .show();
     }
 
     private void loadData() {
@@ -77,7 +88,6 @@ public class RequestFragment extends Fragment {
                         Log.d("kek", responceText);
                         try {
                             JSONObject json = new JSONObject(responceText).getJSONObject("Request");
-                            tvStatus.setText(getActivity().getIntent().getStringExtra("status"));
                             tvFIO.setText(json.getJSONObject("ContactContactID")
                                     .getJSONObject("UserID")
                                     .getString("FullName")
@@ -85,9 +95,11 @@ public class RequestFragment extends Fragment {
                             tvDescription.setText(json.getString("Description"));
                             etSolution.setText(json.getString("SolutionDescription"));
                             tvEventFirst.setText(json.getString("CreatedAt") + "\n" + "Время подачи заявки");
-                            tvEventSecond.setText(json.getString("SLARecoveryTime") + "\n" + "Планируемое время завершения");
+                            tvEventSecond.setText(json.getString("SLARecoveryTime").length() > 10 ?
+                                    (json.getString("SLARecoveryTime") + "\n" + "Планируемое время завершения") :
+                                    "Планируемое время завершения не указано");
                             tvEventThird.setText(json.getString("ActualRecoveryTime") + "\n" + "Фактическое время завершения");
-
+                            dialog.cancel();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -95,7 +107,7 @@ public class RequestFragment extends Fragment {
 
                     @Override
                     public void onFailure(int responseCode) {
-
+                        Toast.makeText(getContext(), "Ошибка получения данных", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
